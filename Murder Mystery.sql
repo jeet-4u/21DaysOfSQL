@@ -62,17 +62,17 @@ WHERE TIME(c.call_time) BETWEEN '20:50' AND '21:00';
 -- Which suspect's location, statements, and phone activity fail to match?
 WITH cte AS (
 SELECT e.name, keylog.room As actual_location, a.claimed_location,
-keylog.entry_time, a.clain time, keylog.exit time, c.call_time, c.duration_sac
+keylog.entry_time, a.claim_time, keylog.exit_time, c.call_time, c.duration_sec
 FROM employees e
 JOIN keycard_logs keylog
 ON keylog.employee_id = e.employee_id
 JOIN alibis a
 ON a.employee_id = e.employee_id
 JOIN calls c
-ON c.caller_ide = e.employer_id)
-SELECT c1.*, ev.description
+ON c.caller_id = e.employee_id)
+SELECT cl.*, ev.description
 FROM cte cl
 JOIN evidence ev
 ON ev.room = cl.actual_location
 WHERE cl.actual_location = 'CEO Office'
-AND TIME(c1.call_time) < '21:00';
+AND TIME(cl.call_time) < '21:00';
